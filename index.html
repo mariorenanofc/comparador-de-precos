@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador de Preços</title>
+  <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Comparador de Preços</h1>
+    
+    <!-- Formulário para inserção de dados -->
+    <form id="formulario">
+      <div class="input-group">
+        <label for="item">Item:</label>
+        <input type="text" id="item" name="item">
+      </div>
+      <div class="input-group">
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade" min="1">
+      </div>
+      <div class="input-group">
+        <label for="miranda">Miranda Atacarejo:</label>
+        <input type="number" id="miranda" name="miranda" min="0">
+      </div>
+      <div class="input-group">
+        <label for="medeiros">Mercantil Medeiros:</label>
+        <input type="number" id="medeiros" name="medeiros" min="0">
+      </div>
+      <div class="input-group">
+        <label for="manu">Quitanda da Manu:</label>
+        <input type="number" id="manu" name="manu" min="0">
+      </div>
+      <div class="input-group">
+        <label for="americanas">Americanas:</label>
+        <input type="number" id="americanas" name="americanas" min="0">
+      </div>
+      <button type="button" id="adicionar-item">Adicionar Item</button>
+    </form>
+
+    <!-- Resultados -->
+    <div id="resultados"></div>
+
+    <!-- Botões Calcular e Limpar -->
+    <div id="botoes">
+      <button type="button" id="calcular" style="display: block;">Calcular</button>
+      <button type="button" id="limpar" style="display: block;">Limpar</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
