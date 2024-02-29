@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Adicionar o item à lista apenas se houver pelo menos 2 mercados com valores
-        if (Object.keys(precos).length >= 2) {
+        if (Object.keys(precos).length >= 1) {
           const novoItem = {
             nome: item.toUpperCase(), // Converte o nome do item para maiúsculas
             quantidade: quantidade,
@@ -108,36 +108,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const mercados = document.createElement("div");
       mercados.classList.add("mercados");
 
-      let menorPreco = Infinity;
-      let mercadoMaisBarato = "";
-
       for (const mercado in item.precos) {
         const preco = item.precos[mercado];
         if (preco !== 0) {
           const divMercado = document.createElement("div");
           divMercado.classList.add("mercado");
 
-          // Definir a cor com base no preço
-          if (preco < menorPreco) {
-            menorPreco = preco;
-            mercadoMaisBarato = mercado;
-          }
-
-          divMercado.textContent = `${mercado}: ${preco}`;
+          divMercado.textContent = `${mercado}: R$ ${preco.toFixed(2)}`;
           mercados.appendChild(divMercado);
-        }
-      }
-
-      // Destacar o mercado mais barato
-      for (const mercado in item.precos) {
-        const preco = item.precos[mercado];
-        if (preco === menorPreco) {
-          const divMercado = mercados.querySelector(
-            `div.mercado:nth-child(${
-              Object.keys(item.precos).indexOf(mercado) + 1
-            })`
-          );
-          divMercado.classList.add("mais-barato");
         }
       }
 
@@ -165,41 +143,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const mercados = ["miranda", "medeiros", "manu", "americanas"];
 
-    // Para cada mercado, vamos criar um objeto para armazenar os itens mais baratos
+    // Objeto para armazenar os itens mais baratos em cada mercado
     const itensMaisBaratos = {};
+    // Objeto para armazenar o valor total de cada mercado
+    const valorTotalMercado = {};
+
+    // Inicializar os objetos
     mercados.forEach(function (mercado) {
       itensMaisBaratos[mercado] = [];
-    });
-
-    // Para cada mercado, vamos criar um objeto para armazenar o preço mínimo encontrado
-    const menorPrecos = {};
-    mercados.forEach(function (mercado) {
-      menorPrecos[mercado] = Infinity;
+      valorTotalMercado[mercado] = 0;
     });
 
     // Iterar sobre cada item na lista de itens
     itens.forEach(function (item) {
-      // Para cada mercado associado ao item, verificar se é o mais barato até agora
+      // Iterar sobre cada mercado associado ao item
       for (const mercado in item.precos) {
         const preco = item.precos[mercado];
-        if (preco < menorPrecos[mercado]) {
-          // Se for o caso, atualizar o preço mínimo e a lista de itens mais baratos para esse mercado
-          menorPrecos[mercado] = preco;
-          itensMaisBaratos[mercado] = [
-            { nome: item.nome, quantidade: item.quantidade, preco: preco },
-          ];
-        } else if (preco === menorPrecos[mercado]) {
-          // Se o preço for igual ao mínimo até agora, adicionar o item à lista de itens mais baratos para esse mercado
-          itensMaisBaratos[mercado].push({
-            nome: item.nome,
-            quantidade: item.quantidade,
-            preco: preco,
-          });
+        if (preco > 0) {
+          if (
+            preco < itensMaisBaratos[mercado][0]?.preco ||
+            !itensMaisBaratos[mercado][0]
+          ) {
+            itensMaisBaratos[mercado] = [
+              { nome: item.nome, quantidade: item.quantidade, preco: preco },
+            ];
+          } else if (preco === itensMaisBaratos[mercado][0].preco) {
+            itensMaisBaratos[mercado].push({
+              nome: item.nome,
+              quantidade: item.quantidade,
+              preco: preco,
+            });
+          }
+          valorTotalMercado[mercado] += preco * item.quantidade;
         }
       }
     });
 
-    // Exibir os itens mais baratos de cada mercado
+    // Exibir os itens mais baratos de cada mercado e o valor total
     mercados.forEach(function (mercado) {
       const divMercado = document.createElement("div");
       divMercado.classList.add("mercado");
@@ -217,6 +197,12 @@ document.addEventListener("DOMContentLoaded", function () {
         listaItens.appendChild(itemLista);
       });
       divMercado.appendChild(listaItens);
+
+      const totalMercado = document.createElement("p");
+      totalMercado.textContent = `Valor Total: R$ ${valorTotalMercado[
+        mercado
+      ].toFixed(2)}`;
+      divMercado.appendChild(totalMercado);
 
       resultados.appendChild(divMercado);
     });
