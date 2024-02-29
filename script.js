@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
 
-        // Adicionar o item à lista apenas se houver pelo menos 2 mercados com valores
+        // Adicionar o item à lista apenas se houver pelo menos 1 mercado com valor
         if (Object.keys(precos).length >= 1) {
           const novoItem = {
             nome: item.toUpperCase(), // Converte o nome do item para maiúsculas
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           itens.push(novoItem);
         } else {
-          alert("Por favor, adicione valores para pelo menos dois mercados.");
+          alert("Por favor, adicione valores para pelo menos um mercado.");
           return;
         }
       }
@@ -115,6 +115,12 @@ document.addEventListener("DOMContentLoaded", function () {
           divMercado.classList.add("mercado");
 
           divMercado.textContent = `${mercado}: R$ ${preco.toFixed(2)}`;
+
+          // Destacar em verde os itens mais baratos de cada mercado
+          if (preco === Math.min(...Object.values(item.precos))) {
+            divMercado.style.color = "green";
+          }
+
           mercados.appendChild(divMercado);
         }
       }
@@ -136,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Função para calcular os preços mais baratos de cada mercado e exibir na página
   function calcularPrecosMaisBaratos() {
     // Limpar resultados anteriores
     resultados.innerHTML = "";
@@ -162,10 +167,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (preco > 0) {
           if (
             preco < itensMaisBaratos[mercado][0]?.preco ||
-            !itensMaisBaratos[mercado][0]
+            itensMaisBaratos[mercado].length === 0
           ) {
             itensMaisBaratos[mercado] = [
-              { nome: item.nome, quantidade: item.quantidade, preco: preco },
+              {
+                nome: item.nome,
+                quantidade: item.quantidade,
+                preco: preco,
+              },
             ];
           } else if (preco === itensMaisBaratos[mercado][0].preco) {
             itensMaisBaratos[mercado].push({
