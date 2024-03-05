@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Destacar em verde os itens mais baratos de cada mercado
           if (preco === Math.min(...Object.values(item.precos))) {
-            divMercado.style.color = "green";
+            divMercado.style.border = "solid 2px red";
           }
 
           mercados.appendChild(divMercado);
@@ -164,25 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Iterar sobre cada mercado associado ao item
       for (const mercado in item.precos) {
         const preco = item.precos[mercado];
-        if (preco > 0) {
-          if (
-            preco < itensMaisBaratos[mercado][0]?.preco ||
-            itensMaisBaratos[mercado].length === 0
-          ) {
-            itensMaisBaratos[mercado] = [
-              {
-                nome: item.nome,
-                quantidade: item.quantidade,
-                preco: preco,
-              },
-            ];
-          } else if (preco === itensMaisBaratos[mercado][0].preco) {
-            itensMaisBaratos[mercado].push({
+        if (preco === Math.min(...Object.values(item.precos))) {
+          itensMaisBaratos[mercado].push(
+            {
               nome: item.nome,
               quantidade: item.quantidade,
               preco: preco,
-            });
-          }
+            }
+          )
           valorTotalMercado[mercado] += preco * item.quantidade;
         }
       }
@@ -198,9 +187,10 @@ document.addEventListener("DOMContentLoaded", function () {
       divMercado.appendChild(tituloMercado);
 
       const listaItens = document.createElement("ul");
+      listaItens.classList.add("lista-mercado");
       itensMaisBaratos[mercado].forEach(function (item) {
         const itemLista = document.createElement("li");
-        itemLista.textContent = `Item: ${item.nome} - Quantidade: ${
+        itemLista.textContent = ` ${item.nome} - Quantidade: ${
           item.quantidade
         } - Valor Unitário: R$ ${item.preco.toFixed(2)}`;
         listaItens.appendChild(itemLista);
