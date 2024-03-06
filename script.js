@@ -1,3 +1,22 @@
+// Função para rolar até o formulário
+function scrollToForm() {
+  var formulario = document.getElementById("formulario");
+  formulario.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+window.addEventListener("scroll", function () {
+  var resultados = document.getElementById("resultados");
+  var voltarAoTopo = document.querySelector(".voltar-ao-topo");
+
+  // Verifica se a div resultados está visível na tela
+  if (resultados.getBoundingClientRect().top < window.innerHeight) {
+    voltarAoTopo.style.display = "block"; // Mostra o botão
+  } else {
+    voltarAoTopo.style.display = "none"; // Oculta o botão
+  }
+});
+
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("formulario");
   const resultados = document.getElementById("resultados");
@@ -165,13 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
       for (const mercado in item.precos) {
         const preco = item.precos[mercado];
         if (preco === Math.min(...Object.values(item.precos))) {
-          itensMaisBaratos[mercado].push(
-            {
-              nome: item.nome,
-              quantidade: item.quantidade,
-              preco: preco,
-            }
-          )
+          itensMaisBaratos[mercado].push({
+            nome: item.nome,
+            quantidade: item.quantidade,
+            preco: preco,
+          });
           valorTotalMercado[mercado] += preco * item.quantidade;
         }
       }
@@ -206,4 +223,6 @@ document.addEventListener("DOMContentLoaded", function () {
       resultados.appendChild(divMercado);
     });
   }
+
+  
 });

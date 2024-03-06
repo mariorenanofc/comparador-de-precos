@@ -13,11 +13,57 @@ body {
 
 .container {
   max-width: 800px;
-  margin: 20px auto;
+  margin: 50px auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.conteiner-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #dc3545; /* Vermelho mais forte */
+  color: #fff;
+  text-align: center;
+  z-index: center;
+}
+
+.conteiner-top h2 {
+  margin: auto;
+  padding-top: 5px;
+  font-size: 25px;
+}
+
+/* Botão de voltar ao topo */
+
+.voltar-ao-topo{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centralizar verticalmente */
+  background-color: #dc3545; /* Vermelho mais forte */
+  color: #fff; /* Cor do ícone */
+}
+
+.voltar-ao-topo i {
+  font-size: 22px;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
@@ -32,12 +78,12 @@ input, button {
   margin: 10px auto;
   padding: 15px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #dc3545; /* Vermelho mais forte */
   border-radius: 5px;
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #dc3545; /* Vermelho mais forte */
   color: #fff;
   border: none;
   cursor: pointer;
@@ -45,7 +91,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #c82333; /* Vermelho mais escuro no hover */
 }
 
 .input-group {
