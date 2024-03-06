@@ -16,13 +16,113 @@ window.addEventListener("scroll", function () {
   }
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("formulario");
   const resultados = document.getElementById("resultados");
   const botoes = document.getElementById("botoes");
   const calcularBotao = document.getElementById("calcular");
   const limparBotao = document.getElementById("limpar");
+
+  // Adicionando eventos de toque e arrastar para excluir itens da lista
+  resultados.addEventListener("touchstart", handleTouchStart, false);
+  resultados.addEventListener("touchmove", handleTouchMove, false);
+  resultados.addEventListener("touchend", handleTouchEnd, false);
+  resultados.addEventListener("mousedown", handleMouseDown, false);
+  resultados.addEventListener("mousemove", handleMouseMove, false);
+  resultados.addEventListener("mouseup", handleMouseUp, false);
+
+  let startX;
+  let startY;
+  let isDragging = false;
+  let isItemSwiped = false;
+
+  function handleTouchStart(event) {
+    const touch = event.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+  }
+
+  function handleTouchMove(event) {
+    if (!startX || !startY) return;
+    const touch = event.touches[0];
+    const distX = touch.clientX - startX;
+    const distY = touch.clientY - startY;
+    if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
+      isDragging = true;
+      showDeleteMessage(event.target);
+    }
+  }
+
+  function handleTouchEnd(event) {
+    if (isDragging && !isItemSwiped) {
+      // Excluir item
+      const item = event.target.closest(".item");
+      if (item) {
+        const itemName = item.querySelector("h2").textContent; // Nome do item
+        const itemIndex = itens.findIndex((e) => e.nome === itemName);
+        if (itemIndex !== -1) {
+          itens.splice(itemIndex, 1); // Remover o item do array de itens
+          localStorage.setItem("itens", JSON.stringify(itens)); // Atualizar o armazenamento local
+        }
+        item.remove();
+      }
+    }
+    startX = null;
+    startY = null;
+    isDragging = false;
+    isItemSwiped = false;
+    hideDeleteMessage();
+  }
+
+  function handleMouseDown(event) {
+    startX = event.clientX;
+    startY = event.clientY;
+  }
+
+  function handleMouseMove(event) {
+    if (!startX || !startY) return;
+    const distX = event.clientX - startX;
+    const distY = event.clientY - startY;
+    if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
+      isDragging = true;
+      showDeleteMessage(event.target);
+    }
+  }
+
+  function handleMouseUp(event) {
+    if (isDragging && !isItemSwiped) {
+      // Excluir item
+      const item = event.target.closest(".item");
+      if (item) {
+        const itemName = item.querySelector("h2").textContent; // Nome do item
+        const itemIndex = itens.findIndex((e) => e.nome === itemName);
+        if (itemIndex !== -1) {
+          itens.splice(itemIndex, 1); // Remover o item do array de itens
+          localStorage.setItem("itens", JSON.stringify(itens)); // Atualizar o armazenamento local
+        }
+        item.remove();
+      }
+    }
+    startX = null;
+    startY = null;
+    isDragging = false;
+    isItemSwiped = false;
+    hideDeleteMessage();
+  }
+
+  function showDeleteMessage(target) {
+    if (!target.closest(".item").querySelector(".delete-message")) {
+      const message = document.createElement("div");
+      message.classList.add("delete-message");
+      message.textContent = "Deslize para excluir";
+      target.closest(".item").appendChild(message);
+    }
+  }
+
+  function hideDeleteMessage() {
+    const messages = document.querySelectorAll(".delete-message");
+    messages.forEach((message) => message.remove());
+  }
 
   // Recuperar itens armazenados localmente, se houver
   let itens = JSON.parse(localStorage.getItem("itens")) || [];
@@ -223,6 +323,4 @@ document.addEventListener("DOMContentLoaded", function () {
       resultados.appendChild(divMercado);
     });
   }
-
-  
 });
