@@ -22,6 +22,34 @@ document.addEventListener("DOMContentLoaded", function () {
   const botoes = document.getElementById("botoes");
   const calcularBotao = document.getElementById("calcular");
   const limparBotao = document.getElementById("limpar");
+  const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.style.display = "block";
+            } else {
+                slide.style.display = "none";
+            }
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Mostrar o primeiro slide quando a página carregar
+    showSlide(currentSlide);
+
+    // Alterar os slides a cada 5 segundos
+    setInterval(nextSlide, 5000);
+
+    // Ajustar o tamanho dos slides conforme o tamanho da janela
+    window.addEventListener("resize", function () {
+        // Adicione código para ajustar o tamanho dos slides conforme necessário
+    });
 
   // Adicionando eventos de toque e arrastar para excluir itens da lista
   resultados.addEventListener("touchstart", handleTouchStart, false);
