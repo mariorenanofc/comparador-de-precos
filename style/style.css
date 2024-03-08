@@ -17,7 +17,7 @@ body {
   height: 100vh;
   overflow: hidden;
   min-height: 100%;
-  background-image: url(../src/img/mercado.png);
+  background-image: url(../src/img/slide1.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -96,6 +96,27 @@ body {
   margin: auto;
   padding-top: 5px;
   font-size: 25px;
+}
+
+.container #sobre h2,
+.container #como-funciona h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+.container #sobre,
+.container #como-funciona  {
+  font-size: 22px;
+  margin: auto;
+  font-weight: 400;
+  margin-bottom: 50px;
+}
+
+#formulario h1 {
+  background-color: #dc3545;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  color: #eee;
 }
 
 /* Botão de voltar ao topo */
