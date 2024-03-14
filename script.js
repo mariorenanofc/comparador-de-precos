@@ -23,33 +23,33 @@ document.addEventListener("DOMContentLoaded", function () {
   const calcularBotao = document.getElementById("calcular");
   const limparBotao = document.getElementById("limpar");
   const slides = document.querySelectorAll(".slide");
-    let currentSlide = 0;
+  let currentSlide = 0;
 
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            if (i === index) {
-                slide.style.display = "block";
-            } else {
-                slide.style.display = "none";
-            }
-        });
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    // Mostrar o primeiro slide quando a página carregar
-    showSlide(currentSlide);
-
-    // Alterar os slides a cada 5 segundos
-    setInterval(nextSlide, 5000);
-
-    // Ajustar o tamanho dos slides conforme o tamanho da janela
-    window.addEventListener("resize", function () {
-        // Adicione código para ajustar o tamanho dos slides conforme necessário
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.style.display = "block";
+      } else {
+        slide.style.display = "none";
+      }
     });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  // Mostrar o primeiro slide quando a página carregar
+  showSlide(currentSlide);
+
+  // Alterar os slides a cada 5 segundos
+  setInterval(nextSlide, 5000);
+
+  // Ajustar o tamanho dos slides conforme o tamanho da janela
+  window.addEventListener("resize", function () {
+    // Adicione código para ajustar o tamanho dos slides conforme necessário
+  });
 
   // Adicionando eventos de toque e arrastar para excluir itens da lista
   resultados.addEventListener("touchstart", handleTouchStart, false);
@@ -165,9 +165,21 @@ document.addEventListener("DOMContentLoaded", function () {
       const item = form.item.value.trim().toLowerCase();
       const quantidade = parseFloat(form.quantidade.value);
 
-      // Verificar se o campo de item e quantidade estão preenchidos
-      if (item === "" || isNaN(quantidade) || quantidade <= 0) {
-        alert("Por favor, preencha o campo de item e quantidade corretamente.");
+      // Verificar se o campo de item está vazio
+      if (item === "") {
+        showCustomAlert(
+          "É necessario que tenha a descrição do item para adicionar!",
+          "item"
+        );
+        return;
+      }
+
+      // Verificar se o campo de quantidade está vazio
+      if (isNaN(quantidade) || quantidade <= 0) {
+        showCustomAlert(
+          "Por favor, preencha o campo de Quantidade que está vazio!",
+          "quantidade"
+        );
         return;
       }
 
@@ -211,9 +223,13 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           itens.push(novoItem);
         } else {
-          alert("Por favor, adicione valores para pelo menos um mercado.");
+          showCustomAlert(
+            "Por favor, adicione valores para pelo menos um mercado."
+          );
           return;
         }
+
+        showCustomAlert("Item adicionado com sucesso!", "item");
       }
 
       // Atualizar a lista de resultados na página
@@ -224,7 +240,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Salvar os itens no armazenamento local
       localStorage.setItem("itens", JSON.stringify(itens));
+
     });
+    
+    
 
   // Adicionar evento de clique ao botão "Calcular"
   calcularBotao.addEventListener("click", function () {
@@ -349,6 +368,54 @@ document.addEventListener("DOMContentLoaded", function () {
       divMercado.appendChild(totalMercado);
 
       resultados.appendChild(divMercado);
+    });
+
+    // Calcular e exibir o total economizado
+    exibirTotalEconomizado();
+  }
+
+  // Função para calcular o total economizado
+  function calcularTotalEconomizado() {
+    let totalEconomizado = 0;
+
+    itens.forEach(function (item) {
+      const menorPreco = Math.min(...Object.values(item.precos));
+      totalEconomizado += menorPreco * item.quantidade;
+    });
+
+    return totalEconomizado;
+  }
+
+  // Função para exibir o total economizado na página
+  function exibirTotalEconomizado() {
+    const totalEconomizado = calcularTotalEconomizado();
+    const valorEconomizadoElement =
+      document.getElementById("valor-economizado");
+    valorEconomizadoElement.innerHTML = `<h3>Total de suas compras: R$ ${totalEconomizado.toFixed(
+      2
+    )}</h3>`;
+  }
+
+  // Função para exibir alertas personalizados
+  function showCustomAlert(message, inputId) {
+    const alertDiv = document.createElement("div");
+    alertDiv.classList.add("custom-alert", "success");
+    alertDiv.textContent = message;
+
+    // Adicionar o alerta à página
+    const container = document.getElementById("alert-container");
+    container.appendChild(alertDiv);
+
+    //Remove o alerta após um determinado tempo
+
+    setTimeout(function () {
+      alertDiv.remove();
+    }, 3000);
+
+    // Adicionando evento de clique para redirecionar o foco para o campo em falta
+    alertDiv.addEventListener("click", function () {
+      const inputField = document.getElementById(inputId);
+      inputField.focus();
     });
   }
 });
