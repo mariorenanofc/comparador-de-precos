@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (item === "") {
         showCustomAlert(
           "É necessario que tenha a descrição do item para adicionar!",
-          "item"
+          "item", "error"
         );
         return;
       }
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (isNaN(quantidade) || quantidade <= 0) {
         showCustomAlert(
           "Por favor, preencha o campo de Quantidade que está vazio!",
-          "quantidade"
+          "quantidade", "error"
         );
         return;
       }
@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        showCustomAlert("Item adicionado com sucesso!", "item");
+        showCustomAlert("Item adicionado com sucesso!", "item", "success");
       }
 
       // Atualizar a lista de resultados na página
@@ -396,26 +396,31 @@ document.addEventListener("DOMContentLoaded", function () {
     )}</h3>`;
   }
 
-  // Função para exibir alertas personalizados
-  function showCustomAlert(message, inputId) {
+  function showCustomAlert(message, inputId, type = "success") {
     const alertDiv = document.createElement("div");
-    alertDiv.classList.add("custom-alert", "success");
     alertDiv.textContent = message;
-
+  
+    // Adiciona classes de acordo com o tipo de alerta
+    if (type === "success") {
+      alertDiv.classList.add("custom-alert", "success");
+    } else if (type === "error") {
+      alertDiv.classList.add("custom-alert", "error");
+    }
+  
     // Adicionar o alerta à página
     const container = document.getElementById("alert-container");
     container.appendChild(alertDiv);
-
+  
     //Remove o alerta após um determinado tempo
-
     setTimeout(function () {
       alertDiv.remove();
     }, 3000);
-
+  
     // Adicionando evento de clique para redirecionar o foco para o campo em falta
     alertDiv.addEventListener("click", function () {
       const inputField = document.getElementById(inputId);
       inputField.focus();
     });
   }
+  
 });
