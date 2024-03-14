@@ -214,6 +214,30 @@ button:hover {
   gap: 10px;
 }
 
+/*Estilização do alerta de mensagem*/
+.custom-alert {
+  background-color: #f8d7da;
+  color: #f6041c;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.custom-alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.custom-alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+
 /* Estilos para os itens de mercado */
 .mercado {
   margin-bottom: 18px;
@@ -264,6 +288,7 @@ button:hover {
 .lista-mercado {
   margin-top: 20px;
 }
+
 
 /* Ajustes para dispositivos móveis */
 @media (max-width: 768px) {
