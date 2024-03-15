@@ -79,31 +79,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const touch = event.touches[0];
     const distX = touch.clientX - startX;
     const distY = touch.clientY - startY;
+    const target = event.target.closest(".item");
+
     if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
       isDragging = true;
-      showDeleteMessage(event.target);
+      if (distX > 0) {
+        showDeleteMessage(target, "left"); // Exibir mensagem do lado esquerdo se arrastar para direita
+      } else {
+        showDeleteMessage(target, "right"); // Exibir mensagem do lado direito se arrastar para esquerda
+      }
+      target.style.transform = `translateX(${distX}px)`;
     }
   }
 
   function handleTouchEnd(event) {
     if (isDragging && !isItemSwiped) {
+      const target = event.target.closest(".item");
+      target.style.transform = ""; // Resetar a transformação
+      hideDeleteMessage(target);
+
       // Excluir item
-      const item = event.target.closest(".item");
-      if (item) {
-        const itemName = item.querySelector("h2").textContent; // Nome do item
-        const itemIndex = itens.findIndex((e) => e.nome === itemName);
-        if (itemIndex !== -1) {
-          itens.splice(itemIndex, 1); // Remover o item do array de itens
-          localStorage.setItem("itens", JSON.stringify(itens)); // Atualizar o armazenamento local
-        }
-        item.remove();
+      const itemName = target.querySelector("h2").textContent; // Nome do item
+      const itemIndex = itens.findIndex((e) => e.nome === itemName);
+      if (itemIndex !== -1) {
+        itens.splice(itemIndex, 1); // Remover o item do array de itens
+        localStorage.setItem("itens", JSON.stringify(itens)); // Atualizar o armazenamento local
+        // Recarregar a página após excluir o item
+        window.location.reload();
       }
+
+      showCustomAlert("Item excluído com sucesso!", "success");
+      target.remove(); // Remover o item da lista
+      isItemSwiped = true;
     }
+
     startX = null;
     startY = null;
     isDragging = false;
-    isItemSwiped = false;
-    hideDeleteMessage();
   }
 
   function handleMouseDown(event) {
@@ -115,45 +127,54 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!startX || !startY) return;
     const distX = event.clientX - startX;
     const distY = event.clientY - startY;
+    const target = event.target.closest(".item");
+
     if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
       isDragging = true;
-      showDeleteMessage(event.target);
+      if (distX > 0) {
+        showDeleteMessage(target, "left"); // Exibir mensagem do lado esquerdo se arrastar para direita
+      } else {
+        showDeleteMessage(target, "right"); // Exibir mensagem do lado direito se arrastar para esquerda
+      }
+      target.style.transform = `translateX(${distX}px)`;
     }
   }
 
   function handleMouseUp(event) {
     if (isDragging && !isItemSwiped) {
-      // Excluir item
-      const item = event.target.closest(".item");
-      if (item) {
-        const itemName = item.querySelector("h2").textContent; // Nome do item
-        const itemIndex = itens.findIndex((e) => e.nome === itemName);
-        if (itemIndex !== -1) {
-          itens.splice(itemIndex, 1); // Remover o item do array de itens
-          localStorage.setItem("itens", JSON.stringify(itens)); // Atualizar o armazenamento local
-        }
-        item.remove();
-      }
+      const target = event.target.closest(".item");
+      target.style.transform = ""; // Resetar a transformação
+      hideDeleteMessage(target);
     }
+
     startX = null;
     startY = null;
     isDragging = false;
     isItemSwiped = false;
-    hideDeleteMessage();
   }
 
-  function showDeleteMessage(target) {
-    if (!target.closest(".item").querySelector(".delete-message")) {
-      const message = document.createElement("div");
-      message.classList.add("delete-message");
-      message.textContent = "Deslize para excluir";
-      target.closest(".item").appendChild(message);
+  function showDeleteMessage(target, side) {
+    const existingMessage = target.querySelector(".delete-message");
+    if (existingMessage) {
+      existingMessage.remove();
     }
+
+    const message = document.createElement("div");
+    message.classList.add("delete-message");
+    message.textContent = "Excluir";
+    if (side === "left") {
+      message.style.left = "0";
+    } else {
+      message.style.right = "0";
+    }
+    target.appendChild(message);
   }
 
-  function hideDeleteMessage() {
-    const messages = document.querySelectorAll(".delete-message");
-    messages.forEach((message) => message.remove());
+  function hideDeleteMessage(target) {
+    const message = target.querySelector(".delete-message");
+    if (message) {
+      message.remove();
+    }
   }
 
   // Recuperar itens armazenados localmente, se houver
@@ -274,6 +295,11 @@ document.addEventListener("DOMContentLoaded", function () {
       itemHeader.classList.add("item-header");
       itemHeader.innerHTML = `<h2>${item.nome}</h2><p>Quantidade: ${item.quantidade}</p>`;
       divItem.appendChild(itemHeader);
+
+      const deleteDescription = document.createElement("div");
+      deleteDescription.classList.add("delete-description");
+      deleteDescription.textContent = "Excluir";
+      divItem.appendChild(deleteDescription);
 
       const mercados = document.createElement("div");
       mercados.classList.add("mercados");
