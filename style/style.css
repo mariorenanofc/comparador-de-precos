@@ -67,6 +67,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   background-color: red; /* Cor de fundo da descrição */
   color: white; /* Cor do texto da descrição */
   transform: translateX(-100%);
@@ -75,6 +76,9 @@ body {
 
 .item:hover .delete-description {
   transform: translateX(0);
+  width: 40%;
+  height: 20%;
+  top:80%;
 }
 
 

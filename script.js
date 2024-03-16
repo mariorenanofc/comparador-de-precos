@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const message = document.createElement("div");
     message.classList.add("delete-message");
-    message.textContent = "Excluir";
+    message.textContent = "Deslize Excluir";
     if (side === "left") {
       message.style.left = "0";
     } else {
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const deleteDescription = document.createElement("div");
       deleteDescription.classList.add("delete-description");
-      deleteDescription.textContent = "Excluir";
+      deleteDescription.textContent = "Deslize para Excluir";
       divItem.appendChild(deleteDescription);
 
       const mercados = document.createElement("div");
